@@ -3,413 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jjjj ti amu</title>
+    <title>Starbucks Barista Trainer App</title>
     <style>
         :root {
-            --sb-green: #006241;
-            --sb-light-green: #d4e9e2;
-            --sb-dark: #1e3932;
+            --sb-green: #00704A;
+            --sb-dark: #1E3932;
+            --sb-light-green: #D4E9E2;
+            --sb-accent: #F2F0EB;
             --sb-text: #212121;
-            --sb-gray: #f2f0eb;
-            --success: #2e7d32;
-            --error: #c62828;
+            --sb-white: #FFFFFF;
+            --sb-danger: #E74C3C;
+            --sb-success: #2ECC71;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--sb-gray);
-            color: var(--sb-text);
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 500px;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background-color: var(--sb-dark);
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-
-        header h1 { font-size: 1.4rem; margin-bottom: 4px; }
-        header p { font-size: 0.85rem; color: var(--sb-light-green); }
-
-        .score-board {
-            display: flex;
-            justify-content: space-around;
-            background-color: var(--sb-light-green);
-            padding: 8px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: var(--sb-dark);
-        }
-
-        .ticket-container {
-            padding: 20px;
-            background: #fffbfa;
-            border-bottom: 2px dashed #ccc;
-            margin: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .ticket-header { font-size: 0.8rem; text-transform: uppercase; color: #666; letter-spacing: 1px; }
-        .ticket-drink { font-size: 1.5rem; font-weight: 800; color: var(--sb-dark); }
-
-        .workspace { padding: 0 15px 15px 15px; display: flex; flex-direction: column; gap: 15px; }
-        .control-group { background: var(--sb-gray); padding: 12px; border-radius: 10px; }
-        .control-group h3 { font-size: 0.95rem; margin-bottom: 8px; color: var(--sb-dark); }
-
-        .counter-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .counter-controls { display: flex; align-items: center; gap: 12px; }
-
-        .btn-circle {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid var(--sb-green);
-            background: white;
-            color: var(--sb-green);
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .counter-value { font-size: 1.1rem; font-weight: bold; min-width: 20px; text-align: center; }
-
-        .steps-container { max-height: 220px; overflow-y: auto; border: 1px solid #ccc; border-radius: 6px; background: white; padding: 5px; }
-        .step-item {
-            padding: 8px 10px; margin: 4px 0; background: #f9f9f9; border-radius: 4px; font-size: 0.85rem;
-            cursor: pointer; border-left: 4px solid #ccc; user-select: none; display: flex; justify-content: space-between; align-items: center;
-        }
-        .step-item.selected { background: var(--sb-light-green); border-left-color: var(--sb-green); font-weight: 600; }
-
-        .order-indicator {
-            background: var(--sb-green); color: white; border-radius: 50%;
-            width: 20px; height: 20px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center;
-        }
-
-        .action-btn {
-            background-color: var(--sb-green); color: white; border: none; padding: 14px;
-            font-size: 1.1rem; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%;
-        }
-
-        .feedback-view { display: none; padding: 20px; }
-        .feedback-header { font-size: 1.4rem; font-weight: bold; margin-bottom: 15px; text-align: center; }
-        .feedback-header.correct { color: var(--success); }
-        .feedback-header.incorrect { color: var(--error); }
-
-        .comparison-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; font-size: 0.85rem; }
-        .comp-column { background: var(--sb-gray); padding: 10px; border-radius: 8px; }
-        .comp-column h4 { margin-bottom: 6px; color: var(--sb-dark); border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background-color: var(--sb-accent); color: var(--sb-text); padding-bottom: 60px; }
+        header { background-color: var(--sb-dark); color: var(--sb-white); padding: 15px 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .card { background-color: var(--sb-white); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        h2 { color: var(--sb-dark); margin-bottom: 15px; font-size: 18px; border-bottom: 2px solid var(--sb-light-green); padding-bottom: 5px; }
         
-        .match { color: var(--success); font-weight: bold; }
-        .mismatch { color: var(--error); font-weight: bold; }
+        .nav-tabs { display: flex; background-color: var(--sb-white); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+        .nav-btn { flex: 1; padding: 12px; border: none; background: none; font-weight: bold; color: var(--sb-dark); cursor: pointer; font-size: 14px; }
+        .nav-btn.active { background-color: var(--sb-green); color: var(--sb-white); }
         
-        ol, ul { margin-left: 20px; }
-        li { margin-bottom: 4px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: var(--sb-dark); }
+        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #CCC; border-radius: 8px; font-size: 14px; background-color: #FAFAFA; }
+        
+        .btn { display: inline-block; background-color: var(--sb-green); color: var(--sb-white); padding: 10px 20px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; text-align: center; }
+        .btn-secondary { background-color: #7f8c8d; }
+        .btn-danger { background-color: var(--sb-danger); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; width: auto; }
+
+        .step-card { border: 1px solid var(--sb-light-green); background-color: var(--sb-accent); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        
+        .sizes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        @media (min-width: 600px) { .sizes-grid { grid-template-columns: repeat(4, 1fr); } }
+        .size-box { background: var(--sb-white); border: 1px solid #DDD; border-radius: 6px; padding: 10px; text-align: center; }
+        .size-title { font-weight: bold; font-size: 12px; text-transform: uppercase; color: var(--sb-green); margin-bottom: 8px; }
+        .counter-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+        .counter-row span { font-size: 11px; font-weight: 600; }
+        .counter-controls { display: flex; align-items: center; gap: 5px; }
+        .btn-counter { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--sb-green); background: var(--sb-white); color: var(--sb-green); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; }
+        .counter-value { width: 20px; text-align: center; font-size: 13px; font-weight: bold; }
+
+        .recipe-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #EEE; }
+        .quiz-header-card { background-color: var(--sb-dark); color: var(--sb-white); text-align: center; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        .quiz-target-drink { font-size: 24px; font-weight: bold; color: var(--sb-light-green); margin-top: 5px; }
+        .quiz-target-size { display: inline-block; background-color: var(--sb-green); padding: 4px 12px; border-radius: 15px; font-size: 14px; font-weight: bold; margin-top: 5px; text-transform: uppercase; }
+        .quiz-step-input { border-left: 4px solid var(--sb-green); background-color: #FAFAFA; margin-bottom: 15px; padding: 15px; border-radius: 0 8px 8px 0; }
+        
+        .quiz-counters { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+        .quiz-counter-item { background: var(--sb-white); padding: 6px 10px; border: 1px solid #DDD; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 12px;}
+
+        .feedback-box { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.4; }
+        .feedback-success { background-color: #D4EDDA; color: #155724; border: 1px solid #C3E6CB; }
+        .feedback-error { background-color: #F8D7DA; color: #721C24; border: 1px solid #F5C6CB; }
+        
+        .hidden { display: none !important; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: rgba(30, 57, 50, 0.9); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; z-index: 1000; transition: opacity 0.3s; }
+        
+        /* Sync Bar */
+        #sync-bar { background-color: #f39c12; color: white; text-align: center; padding: 5px; font-size: 12px; font-weight: bold;}
     </style>
 </head>
 <body>
 
-<div class="app-container">
+    <div id="sync-bar">Conectando con JSONBin...</div>
     <header>
-        <h1>Para practicar JJJJJ</h1>
-        <p>serio te lo digo eh</p>
+        <h1>☕ Barista Trainer</h1>
     </header>
 
-    <div class="score-board">
-        <div>Aciertos: <span id="score-correct">0</span></div>
-        <div>Fallos: <span id="score-incorrect">0</span></div>
-    </div>
-
-    <div id="game-view">
-        <div class="ticket-container">
-            <div class="ticket-header">Comanda</div>
-            <div class="ticket-drink" id="ticket-text">Grande Caffé Latte</div>
-        </div>
-
-        <div class="workspace">
-            <div class="control-group">
-                <h3>Cantidades</h3>
-                <div class="counter-row">
-                    <span class="counter-label">☕ Shots Espresso</span>
-                    <div class="counter-controls">
-                        <button class="btn-circle" onclick="decrement('espresso')">-</button>
-                        <span class="counter-value" id="val-espresso">0</span>
-                        <button class="btn-circle" onclick="increment('espresso')">+</button>
-                    </div>
-                </div>
-                <div class="counter-row">
-                    <span class="counter-label">🧴 Pompas Sirope/Salsa</span>
-                    <div class="counter-controls">
-                        <button class="btn-circle" onclick="decrement('pumps')">-</button>
-                        <span class="counter-value" id="val-pumps">0</span>
-                        <button class="btn-circle" onclick="increment('pumps')">+</button>
-                    </div>
-                </div>
-                <div class="counter-row">
-                    <span class="counter-label">🥄 Cucharadas (Matcha/Fruta/Frap)</span>
-                    <div class="counter-controls">
-                        <button class="btn-circle" onclick="decrement('scoops')">-</button>
-                        <span class="counter-value" id="val-scoops">0</span>
-                        <button class="btn-circle" onclick="increment('scoops')">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <h3>Método (Pulsa en orden para secuenciar)</h3>
-                <div class="steps-container" id="steps-box"></div>
-            </div>
-
-            <button class="action-btn" onclick="checkAnswer()">Verificar Receta</button>
-        </div>
-    </div>
-
-    <div id="feedback-view" class="feedback-view">
-        <div id="feedback-title" class="feedback-header"></div>
+    <div class="container">
         
-        <div class="comparison-box">
-            <div class="comp-column">
-                <h4>📊 Cantidades de Ingredientes</h4>
-                <div id="comp-ingredients"></div>
-            </div>
-            
-            <div class="comp-column">
-                <h4>🔴 Tu Flujo de Pasos</h4>
-                <ol id="user-steps-list"></ol>
+        <nav class="nav-tabs">
+            <button class="nav-btn active" id="tab-quiz" onclick="switchView('quiz')">🎯 Quiz Mode</button>
+            <button class="nav-btn" id="tab-admin" onclick="switchView('admin')">📋 Mis Recetas</button>
+        </nav>
+
+        <div id="view-quiz" class="view-section">
+            <div id="quiz-setup-area" class="card" style="text-align: center;">
+                <h3>Practica las rutinas</h3>
+                <p style="color: #555; margin: 10px 0 15px 0; font-size: 14px;">Genera una comanda aleatoria para evaluar ingredientes, cantidades y orden.</p>
+                <button class="btn" onclick="generateQuizQuestion()">¡Dame una bebida! 🚀</button>
             </div>
 
-            <div class="comp-column" id="correct-flujo-box">
-                <h4>🟢 Flujo Correcto Oficial</h4>
-                <ol id="correct-steps-list"></ol>
+            <div id="quiz-game-area" class="hidden">
+                <div class="quiz-header-card">
+                    <div>PREPARA LA SIGUIENTE BEBIDA:</div>
+                    <div class="quiz-target-drink" id="quiz-drink-name">...</div>
+                    <div class="quiz-target-size" id="quiz-drink-size">...</div>
+                    <div style="margin-top: 8px; font-size: 12px; color: #CCC;" id="quiz-drink-mark">...</div>
+                </div>
+
+                <div class="card">
+                    <h2>Tu Rutina de Preparación</h2>
+                    <div id="quiz-steps-list"></div>
+                    <button class="btn btn-secondary btn-sm" onclick="addQuizStepRow()" style="margin-top: 10px;">+ Añadir Paso</button>
+                    
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button class="btn" onclick="verifyQuizAnswer()">Verificar ✔️</button>
+                        <button class="btn btn-secondary" onclick="generateQuizQuestion()">Saltar ➡️</button>
+                    </div>
+                </div>
+                <div id="quiz-feedback-results" class="hidden"></div>
             </div>
         </div>
 
-        <button class="action-btn" onclick="nextDrink()">Siguiente Bebida</button>
+        <div id="view-admin" class="view-section hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2>Base de Datos</h2>
+                    <button class="btn btn-sm" onclick="openCreateForm()" style="width: auto; margin-top: 0;">+ Nueva Bebida</button>
+                </div>
+                <div id="recipes-container"></div>
+            </div>
+        </div>
+
+        <div id="view-edit" class="view-section hidden">
+            <div class="card">
+                <h2 id="form-title">Modificar Bebida</h2>
+                <input type="hidden" id="edit-index">
+                
+                <div class="form-group">
+                    <label>Nombre de la Bebida:</label>
+                    <input type="text" id="drink-nombre" placeholder="Ej: Iced Caffé Americano">
+                </div>
+                <div class="form-group">
+                    <label>Marcaje del Vaso (Opcional):</label>
+                    <input type="text" id="drink-marcaje" placeholder="Ej: A">
+                </div>
+
+                <div style="margin: 20px 0 10px 0; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 15px; color: var(--sb-dark);">Pasos de la Rutina</h3>
+                    <button class="btn btn-sm btn-secondary" onclick="addStepFormRow()" style="width: auto; margin:0;">+ Añadir Paso</button>
+                </div>
+
+                <div id="form-steps-container"></div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn" onclick="saveRecipeForm()">Guardar Bebida 💾</button>
+                    <button class="btn btn-secondary" onclick="switchView('admin')">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
     </div>
-</div>
 
-<script>
-    // BASE DE DATOS ACTUALIZADA: Textos simplificados y directos
-    const recipesDB = [
-        {
-            name: "Caffé Latte",
-            sizes: {
-                "Short": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6mm", "Latte Art"] },
-                "Tall": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6mm", "Latte Art"] },
-                "Grande": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6mm", "Latte Art"] },
-                "Venti": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6mm", "Latte Art"] }
-            }
-        },
-        {
-            name: "Latte Macchiato",
-            sizes: {
-                "Short": { espresso: 1, pumps: 1, scoops: 0, steps: ["Vaporizar leche", "Sirope vainilla en taza", "Verter leche hasta 12mm", "Verter espresso arriba", "Espiral de caramelo"] },
-                "Tall": { espresso: 1, pumps: 2, scoops: 0, steps: ["Vaporizar leche", "Sirope vainilla en taza", "Verter leche hasta 12mm", "Verter espresso arriba", "Espiral de caramelo"] },
-                "Grande": { espresso: 2, pumps: 3, scoops: 0, steps: ["Vaporizar leche", "Sirope vainilla en taza", "Verter leche hasta 12mm", "Verter espresso arriba", "Espiral de caramelo"] },
-                "Venti": { espresso: 2, pumps: 4, scoops: 0, steps: ["Vaporizar leche", "Sirope vainilla en taza", "Verter leche hasta 12mm", "Verter espresso arriba", "Espiral de caramelo"] }
-            }
-        },
-        {
-            name: "Caffé Americano",
-            sizes: {
-                "Short": { espresso: 1, pumps: 0, scoops: 0, steps: ["Agua caliente en taza", "Shots directo en taza"] },
-                "Tall": { espresso: 2, pumps: 0, scoops: 0, steps: ["Agua caliente en taza", "Shots directo en taza"] },
-                "Grande": { espresso: 3, pumps: 0, scoops: 0, steps: ["Agua caliente en taza", "Shots directo en taza"] },
-                "Venti": { espresso: 4, pumps: 0, scoops: 0, steps: ["Agua caliente en taza", "Shots directo en taza"] }
-            }
-        },
-        {
-            name: "Cappuccino",
-            sizes: {
-                "Short": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche (6-8s aeración)", "Shots en taza", "Verter libremente (50% leche / 50% espuma)"] },
-                "Tall": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche (6-8s aeración)", "Shots en taza", "Verter libremente (50% leche / 50% espuma)"] },
-                "Grande": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche (6-8s aeración)", "Shots en taza", "Verter libremente (50% leche / 50% espuma)"] },
-                "Venti": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche (6-8s aeración)", "Shots en taza", "Verter libremente (50% leche / 50% espuma)"] }
-            }
-        },
-        {
-            name: "Mocha / Mocha Blanco",
-            sizes: {
-                "Short": { espresso: 1, pumps: 2, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir salsa Mocha", "Remover espresso y salsa", "Leche hasta 12mm", "Nata montada"] },
-                "Tall": { espresso: 1, pumps: 3, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir salsa Mocha", "Remover espresso y salsa", "Leche hasta 12mm", "Nata montada"] },
-                "Grande": { espresso: 2, pumps: 4, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir salsa Mocha", "Remover espresso y salsa", "Leche hasta 12mm", "Nata montada"] },
-                "Venti": { espresso: 2, pumps: 5, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir salsa Mocha", "Remover espresso y salsa", "Leche hasta 12mm", "Nata montada"] }
-            }
-        },
-        {
-            name: "Iced Caramel Macchiato",
-            sizes: {
-                "Tall": { espresso: 1, pumps: 2, scoops: 0, steps: ["Sirope vainilla abajo", "Leche fría hasta línea superior", "Añadir hielo", "Shots de espresso arriba", "Espiral de caramelo"] },
-                "Grande": { espresso: 2, pumps: 3, scoops: 0, steps: ["Sirope vainilla abajo", "Leche fría hasta línea superior", "Añadir hielo", "Shots de espresso arriba", "Espiral de caramelo"] },
-                "Venti": { espresso: 3, pumps: 5, scoops: 0, steps: ["Sirope vainilla abajo", "Leche fría hasta línea superior", "Añadir hielo", "Shots de espresso arriba", "Espiral de caramelo"] }
-            }
-        },
-        {
-            name: "Iced Brown Sugar Shaken",
-            sizes: {
-                "Tall": { espresso: 2, pumps: 3, scoops: 0, steps: ["Shots Blonde en taza", "Sirope, canela y hielo en coctelera", "Agitar 10 veces", "Verter en vaso", "Completar con Oatmilk hasta 6mm"] },
-                "Grande": { espresso: 3, pumps: 4, scoops: 0, steps: ["Shots Blonde en taza", "Sirope, canela y hielo en coctelera", "Agitar 10 veces", "Verter en vaso", "Completar con Oatmilk hasta 6mm"] },
-                "Venti": { espresso: 4, pumps: 6, scoops: 0, steps: ["Shots Blonde en taza", "Sirope, canela y hielo en coctelera", "Agitar 10 veces", "Verter en vaso", "Completar con Oatmilk hasta 6mm"] }
-            }
-        }
-    ];
+    <div id="toast" class="toast hidden"></div>
 
-    let currentDrink = {};
-    let currentSize = "";
-    let userSelections = { espresso: 0, pumps: 0, scoops: 0, steps: [] };
-    let globalCorrect = 0;
-    let globalIncorrect = 0;
+    <script>
+        // HARDCODED CREDENTIALS
+        const BIN_ID = "6a1c91f821f9ee59d2a22d38";
+        const API_KEY = "$2a$10$nTUBpHHS5uOG3Vg7UcdV/.jj5fDXHPE524fdEKPmYfS3KoRXqavEm";
 
-    function increment(type) {
-        userSelections[type]++;
-        document.getElementById(`val-${type}`).innerText = userSelections[type];
-    }
+        // EXPANDED ACTIONS BASED ON PDF MANUAL
+        const ACCIONES_PREDEFINIDAS = [
+            "Vaporizar leche",
+            "Shots en cola",
+            "Añadir sirope",
+            "Añadir hielo",
+            "Añade líquido / leche",
+            "Añade base / té / refresha",
+            "Añade fruta / polvos",
+            "Añadir base Frappuccino",
+            "Batir / Agitar (Shaker/Blender)",
+            "Finalizar y conectar"
+        ];
 
-    function decrement(type) {
-        if(userSelections[type] > 0) {
-            userSelections[type]--;
-            document.getElementById(`val-${type}`).innerText = userSelections[type];
-        }
-    }
+        const TAMAÑOS = ["short", "tall", "grande", "venti"];
 
-    function nextDrink() {
-        userSelections = { espresso: 0, pumps: 0, scoops: 0, steps: [] };
-        ['espresso', 'pumps', 'scoops'].forEach(t => document.getElementById(`val-${t}`).innerText = 0);
-        
-        const randomRecipe = recipesDB[Math.floor(Math.random() * recipesDB.length)];
-        const sizesAvailable = Object.keys(randomRecipe.sizes);
-        currentSize = sizesAvailable[Math.floor(Math.random() * sizesAvailable.length)];
-        currentDrink = randomRecipe;
-
-        document.getElementById("ticket-text").innerText = `${currentSize} ${currentDrink.name}`;
-
-        const stepsBox = document.getElementById("steps-box");
-        stepsBox.innerHTML = "";
-        
-        const originalSteps = currentDrink.sizes[currentSize].steps;
-        const shuffledSteps = [...originalSteps].sort(() => Math.random() - 0.5);
-
-        shuffledSteps.forEach((stepText) => {
-            const div = document.createElement("div");
-            div.className = "step-item";
-            div.innerText = stepText;
-            div.onclick = () => toggleStepSelection(div, stepText);
-            stepsBox.appendChild(div);
-        });
-
-        document.getElementById("game-view").style.display = "block";
-        document.getElementById("feedback-view").style.display = "none";
-    }
-
-    function toggleStepSelection(element, text) {
-        const index = userSelections.steps.indexOf(text);
-        if (index > -1) {
-            userSelections.steps.splice(index, 1);
-            element.classList.remove("selected");
-        } else {
-            userSelections.steps.push(text);
-            element.classList.add("selected");
-        }
-        rebuildStepBadges();
-    }
-
-    function rebuildStepBadges() {
-        const items = document.querySelectorAll('.step-item');
-        items.forEach(el => {
-            const text = el.childNodes[0].textContent.trim();
-            const idx = userSelections.steps.indexOf(text);
-            const badg = el.querySelector('.order-indicator');
-            if(badg) badg.remove();
-            if(idx > -1) {
-                const badge = document.createElement("span");
-                badge.className = "order-indicator";
-                badge.innerText = idx + 1;
-                el.appendChild(badge);
-            }
-        });
-    }
-
-    function checkAnswer() {
-        const target = currentDrink.sizes[currentSize];
-        
-        const espressoOk = userSelections.espresso === target.espresso;
-        const pumpsOk = userSelections.pumps === target.pumps;
-        const scoopsOk = userSelections.scoops === target.scoops;
-        
-        let stepsOk = userSelections.steps.length === target.steps.length;
-        if(stepsOk) {
-            for(let i=0; i<target.steps.length; i++) {
-                if(userSelections.steps[i] !== target.steps[i]) {
-                    stepsOk = false;
-                    break;
+        // BASE DEFAULT DATA (Generated from PDF to initialize the Bin)
+        let localDB = {
+            "bebidas": [
+                {
+                    "nombre": "Caffé Latte",
+                    "marcaje": "L",
+                    "pasos": [
+                        { "orden": 1, "accion": "Vaporizar leche", "requiere_cantidades": false, "observaciones": "Línea correcta de jarra. Vaporiza 2 seg." },
+                        { "orden": 2, "accion": "Shots en cola", "requiere_cantidades": true, "cantidades": { "short": {"shots":1,"pumps":0,"extras":0}, "tall": {"shots":1,"pumps":0,"extras":0}, "grande": {"shots":2,"pumps":0,"extras":0}, "venti": {"shots":3,"pumps":0,"extras":0} }, "observaciones": "Espresso normal." },
+                        { "orden": 3, "accion": "Finalizar y conectar", "requiere_cantidades": false, "observaciones": "Leche 6mm debajo del borde. Latte art." }
+                    ]
+                },
+                {
+                    "nombre": "Caffé Americano",
+                    "marcaje": "A",
+                    "pasos": [
+                        { "orden": 1, "accion": "Shots en cola", "requiere_cantidades": true, "cantidades": { "short": {"shots":1,"pumps":0,"extras":0}, "tall": {"shots":2,"pumps":0,"extras":0}, "grande": {"shots":3,"pumps":0,"extras":0}, "venti": {"shots":4,"pumps":0,"extras":0} }, "observaciones": "Vierte directamente en taza." },
+                        { "orden": 2, "accion": "Finalizar y conectar", "requiere_cantidades": false, "observaciones": "Llenar con agua caliente." }
+                    ]
+                },
+                {
+                    "nombre": "Iced Brown Sugar Oat Shaken Espresso",
+                    "marcaje": "BOE",
+                    "pasos": [
+                        { "orden": 1, "accion": "Shots en cola", "requiere_cantidades": true, "cantidades": { "short": {"shots":0,"pumps":0,"extras":0}, "tall": {"shots":2,"pumps":0,"extras":0}, "grande": {"shots":3,"pumps":0,"extras":0}, "venti": {"shots":4,"pumps":0,"extras":0} }, "observaciones": "Blonde Espresso en vasos de shot." },
+                        { "orden": 2, "accion": "Añadir sirope", "requiere_cantidades": true, "cantidades": { "short": {"shots":0,"pumps":0,"extras":0}, "tall": {"shots":0,"pumps":2,"extras":0}, "grande": {"shots":0,"pumps":3,"extras":0}, "venti": {"shots":0,"pumps":4,"extras":0} }, "observaciones": "Sirope Brown Sugar en la coctelera (pumps completos de CBS)." },
+                        { "orden": 3, "accion": "Añadir hielo", "requiere_cantidades": false, "observaciones": "Hielo hasta el número 3 y agitar 10 veces en coctelera." },
+                        { "orden": 4, "accion": "Finalizar y conectar", "requiere_cantidades": false, "observaciones": "Verter mezcla y rellenar con leche de avena hasta 6mm del borde." }
+                    ]
+                },
+                {
+                    "nombre": "Refresha de Fresa",
+                    "marcaje": "SAR",
+                    "pasos": [
+                        { "orden": 1, "accion": "Añade base / té / refresha", "requiere_cantidades": false, "observaciones": "Strawberry Açaí hasta la 1ra línea de coctelera." },
+                        { "orden": 2, "accion": "Añade líquido / leche", "requiere_cantidades": false, "observaciones": "Agua filtrada hasta la 2da línea." },
+                        { "orden": 3, "accion": "Añade fruta / polvos", "requiere_cantidades": true, "cantidades": { "short": {"shots":0,"pumps":0,"extras":0}, "tall": {"shots":0,"pumps":0,"extras":1}, "grande": {"shots":0,"pumps":0,"extras":1}, "venti": {"shots":0,"pumps":0,"extras":1} }, "observaciones": "Extras = Cucharadas de Strawberry dried fruit." },
+                        { "orden": 4, "accion": "Batir / Agitar (Shaker/Blender)", "requiere_cantidades": false, "observaciones": "Añadir hielo y agitar 10 veces." },
+                        { "orden": 5, "accion": "Finalizar y conectar", "requiere_cantidades": false, "observaciones": "Verter en vaso hasta 6mm debajo del borde." }
+                    ]
+                },
+                {
+                    "nombre": "Frappuccino de Caramelo",
+                    "marcaje": "CRF",
+                    "pasos": [
+                        { "orden": 1, "accion": "Añadir base Frappuccino", "requiere_cantidades": true, "cantidades": { "short": {"shots":0,"pumps":0,"extras":0}, "tall": {"shots":2,"pumps":0,"extras":0}, "grande": {"shots":3,"pumps":0,"extras":0}, "venti": {"shots":4,"pumps":0,"extras":0} }, "observaciones": "Shots = Pumps de Frap Roast en el vaso." },
+                        { "orden": 2, "accion": "Añade líquido / leche", "requiere_cantidades": false, "observaciones": "Leche entera hasta 1ra línea y vaciar en blender." },
+                        { "orden": 3, "accion": "Añadir sirope", "requiere_cantidades": true, "cantidades": { "short": {"shots":0,"pumps":0,"extras":0}, "tall": {"shots":0,"pumps":2,"extras":0}, "grande": {"shots":0,"pumps":3,"extras":0}, "venti": {"shots":0,"pumps":4,"extras":0} }, "observaciones": "Sirope de Caramelo en la jarra." },
+                        { "orden": 4, "accion": "Añadir hielo", "requiere_cantidades": false, "observaciones": "Cazo de hielo correspondiente." },
+                        { "orden": 5, "accion": "Añadir base Frappuccino", "requiere_cantidades": true, "cantidades": { "short": {"shots":0,"pumps":0,"extras":0}, "tall": {"shots":0,"pumps":2,"extras":0}, "grande": {"shots":0,"pumps":3,"extras":0}, "venti": {"shots":0,"pumps":4,"extras":0} }, "observaciones": "Pumps = Pumps de Base Syrup." },
+                        { "orden": 6, "accion": "Batir / Agitar (Shaker/Blender)", "requiere_cantidades": false, "observaciones": "Botón #1 Blender." },
+                        { "orden": 7, "accion": "Finalizar y conectar", "requiere_cantidades": false, "observaciones": "Nata 2.5 vueltas y espirales de caramelo." }
+                    ]
                 }
+            ]
+        };
+
+        let currentQuizDrink = null;
+        let currentQuizSize = "";
+
+        // INIT
+        window.addEventListener('DOMContentLoaded', () => {
+            syncWithJSONBin();
+        });
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        // --- CORE SYNC ---
+        async function syncWithJSONBin() {
+            const syncBar = document.getElementById('sync-bar');
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                
+                if (response.ok) {
+                    const resData = await response.json();
+                    if (resData.record && resData.record.bebidas && resData.record.bebidas.length > 0) {
+                        localDB = resData.record;
+                        syncBar.style.backgroundColor = 'var(--sb-success)';
+                        syncBar.innerText = "Sincronizado con la nube ✔️";
+                    } else {
+                        // Empty bin? Push defaults
+                        await pushToCloud();
+                        syncBar.style.backgroundColor = 'var(--sb-success)';
+                        syncBar.innerText = "Base de datos inicializada ✔️";
+                    }
+                }
+            } catch (err) {
+                syncBar.style.backgroundColor = 'var(--sb-danger)';
+                syncBar.innerText = "Modo Offline (Solo lectura local)";
+            }
+            setTimeout(() => syncBar.style.display = 'none', 3000);
+            renderRecipesList();
+        }
+
+        async function pushToCloud() {
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(localDB)
+                });
+            } catch (e) { console.error("Error subiendo a nube", e); }
+        }
+
+        // --- VIEWS ---
+        function switchView(viewName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            document.getElementById(`tab-${viewName}`).classList.add('active');
+            if (viewName === 'admin') renderRecipesList();
+        }
+
+        // --- ADMIN LIST ---
+        function renderRecipesList() {
+            const container = document.getElementById('recipes-container');
+            container.innerHTML = '';
+            localDB.bebidas.forEach((bebida, index) => {
+                const div = document.createElement('div');
+                div.className = 'recipe-item';
+                div.innerHTML = `
+                    <div class="recipe-info">
+                        <h4>${bebida.nombre} <strong>(${bebida.marcaje || '-'})</strong></h4>
+                        <p style="font-size:12px;color:#666;">${bebida.pasos.length} pasos</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm" onclick="openEditForm(${index})">Editar</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteRecipe(${index})">Eliminar</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteRecipe(index) {
+            if (confirm("¿Eliminar esta bebida?")) {
+                localDB.bebidas.splice(index, 1);
+                pushToCloud();
+                renderRecipesList();
             }
         }
 
-        const isCorrect = espressoOk && pumpsOk && scoopsOk && stepsOk;
-        
-        // Renderizar bloque de cantidades
-        const compIngredients = document.getElementById("comp-ingredients");
-        compIngredients.innerHTML = `
-            <div>Shots: <span class="${espressoOk ? 'match':'mismatch'}">${userSelections.espresso}</span> / Receta: ${target.espresso}</div>
-            <div>Pumps: <span class="${pumpsOk ? 'match':'mismatch'}">${userSelections.pumps}</span> / Receta: ${target.pumps}</div>
-            <div>Cucharas: <span class="${scoopsOk ? 'match':'mismatch'}">${userSelections.scoops}</span> / Receta: ${target.scoops}</div>
-        `;
-
-        // Renderizar lista de pasos del usuario contra la oficial
-        const userList = document.getElementById("user-steps-list");
-        userList.innerHTML = userSelections.steps.length === 0 
-            ? "<li style='color:var(--error)'>No seleccionaste ningún paso.</li>" 
-            : userSelections.steps.map((s, idx) => {
-                const esCorrectoEstePaso = target.steps[idx] === s;
-                return `<li class="${esCorrectoEstePaso ? 'match' : 'mismatch'}">${s}</li>`;
-              }).join('');
-
-        const correctList = document.getElementById("correct-steps-list");
-        correctList.innerHTML = target.steps.map(s => `<li>${s}</li>`).join('');
-
-        // Título y contadores
-        const titleEl = document.getElementById("feedback-title");
-        if(isCorrect) {
-            globalCorrect++;
-            document.getElementById("score-correct").innerText = globalCorrect;
-            titleEl.innerText = "¡Perfecto, receta impecable! 🎉";
-            titleEl.className = "feedback-header correct";
-            document.getElementById("correct-flujo-box").style.display = "none"; // Si es correcto, no hace falta repetir
-        } else {
-            globalIncorrect++;
-            document.getElementById("score-incorrect").innerText = globalIncorrect;
-            titleEl.innerText = "Error en los estándares ❌";
-            titleEl.className = "feedback-header incorrect";
-            document.getElementById("correct-flujo-box").style.display = "block";
+        // --- FORM BUILDER ---
+        function openCreateForm() {
+            document.getElementById('form-title').innerText = "Nueva Bebida";
+            document.getElementById('edit-index').value = "-1";
+            document.getElementById('drink-nombre').value = "";
+            document.getElementById('drink-marcaje').value = "";
+            document.getElementById('form-steps-container').innerHTML = '';
+            addStepFormRow();
+            switchView('edit');
         }
 
-        document.getElementById("game-view").style.display = "none";
-        document.getElementById("feedback-view").style.display = "block";
-    }
+        function openEditForm(index) {
+            const bebida = localDB.bebidas[index];
+            document.getElementById('form-title').innerText = `Editar: ${bebida.nombre}`;
+            document.getElementById('edit-index').value = index;
+            document.getElementById('drink-nombre').value = bebida.nombre;
+            document.getElementById('drink-marcaje').value = bebida.marcaje;
+            document.getElementById('form-steps-container').innerHTML = '';
+            bebida.pasos.forEach(paso => addStepFormRow(paso));
+            switchView('edit');
+        }
 
-    document.addEventListener("DOMContentLoaded", nextDrink);
-</script>
+        function addStepFormRow(stepData = null) {
+            const container = document.getElementById('form-steps-container');
+            const stepIndex = container.children.length + 1;
+            const card = document.createElement('div');
+            card.className = 'step-card step-card-form';
+            
+            const actionVal = stepData ? stepData.accion : ACCIONES_PREDEFINIDAS[0];
+            const reqCant = stepData ? stepData.requiere_cantidades : false;
+            let optionsHtml = ACCIONES_PREDEFINIDAS.map(opt => `<option value="${opt}" ${opt===actionVal?'selected':''}>${opt}</option>`).join('');
+
+            let sizesGridHtml = `<div class="sizes-grid ${reqCant ? '' : 'hidden'}">`;
+            TAMAÑOS.forEach(sz => {
+                let sSh = 0, sPu = 0, sEx = 0;
+                if(stepData && stepData.cantidades && stepData.cantidades[sz]) {
+                    sSh = stepData.cantidades[sz].shots; sPu = stepData.cantidades[sz].pumps; sEx = stepData.cantidades[sz].extras;
+                }
+                sizesGridHtml += `
+                    <div class="size-box" data-size="${sz}">
+                        <div class="size-title">${sz}</div>
+                        <div class="counter-row"><span>☕ Shots/Roast:</span><div class="counter-controls"><div class="btn-counter" onclick="adjC(this,-1)">-</div><div class="counter-value val-shots">${sSh}</div><div class="btn-counter" onclick="adjC(this,1)">+</div></div></div>
+                        <div class="counter-row"><span>🧪 Pumps/Base:</span><div class="counter-controls"><div class="btn-counter" onclick="adjC(this,-1)">-</div><div class="counter-value val-pumps">${sPu}</div><div class="btn-counter" onclick="adjC(this,1)">+</div></div></div>
+                        <div class="counter-row"><span>➕ Extras(Scoops):</span><div class="counter-controls"><div class="btn-counter" onclick="adjC(this,-1)">-</div><div class="counter-value val-extras">${sEx}</div><div class="btn-counter" onclick="adjC(this,1)">+</div></div></div>
+                    </div>`;
+            });
+            sizesGridHtml += `</div>`;
+
+            card.innerHTML = `
+                <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+                    <h3>Paso <span class="step-num">${stepIndex}</span></h3>
+                    <button class="btn btn-danger btn-sm" style="margin:0" onclick="this.closest('.step-card').remove();reindex()">Borrar</button>
+                </div>
+                <select class="form-step-action form-group">${optionsHtml}</select>
+                <div style="margin-bottom:10px;"><input type="checkbox" class="form-step-req" onchange="this.parentElement.nextElementSibling.classList.toggle('hidden')" ${reqCant?'checked':''}> Lleva cantidades por tamaño</div>
+                ${sizesGridHtml}
+                <input type="text" class="form-step-obs form-group" style="margin-top:10px;" value="${stepData?stepData.observaciones:''}" placeholder="Observaciones (Ej: Hielo al nº 3, usar cuchara 10ml)">
+            `;
+            container.appendChild(card);
+        }
+
+        function adjC(btn, d) { let val = parseInt(btn.parentElement.querySelector('.counter-value').innerText); val = Math.max(0, val + d); btn.parentElement.querySelector('.counter-value').innerText = val; }
+        function reindex() { document.querySelectorAll('.step-num').forEach((el, i) => el.innerText = i + 1); }
+
+        function saveRecipeForm() {
+            const stepsList = [];
+            document.querySelectorAll('#form-steps-container .step-card').forEach((card, idx) => {
+                const req = card.querySelector('.form-step-req').checked;
+                let cants = {};
+                if(req) {
+                    card.querySelectorAll('.size-box').forEach(box => {
+                        cants[box.dataset.size] = {
+                            shots: parseInt(box.querySelector('.val-shots').innerText),
+                            pumps: parseInt(box.querySelector('.val-pumps').innerText),
+                            extras: parseInt(box.querySelector('.val-extras').innerText)
+                        };
+                    });
+                } else {
+                    TAMAÑOS.forEach(sz => cants[sz] = {shots:0,pumps:0,extras:0});
+                }
+                stepsList.push({
+                    orden: idx+1, accion: card.querySelector('.form-step-action').value,
+                    requiere_cantidades: req, cantidades: cants,
+                    observaciones: card.querySelector('.form-step-obs').value
+                });
+            });
+
+            const payload = { nombre: document.getElementById('drink-nombre').value, marcaje: document.getElementById('drink-marcaje').value, pasos: stepsList };
+            const idx = parseInt(document.getElementById('edit-index').value);
+            if(idx === -1) localDB.bebidas.push(payload); else localDB.bebidas[idx] = payload;
+            
+            pushToCloud();
+            showToast("Receta guardada.");
+            switchView('admin');
+        }
+
+        // --- QUIZ GAME ---
+        function generateQuizQuestion() {
+            if(!localDB.bebidas.length) return alert("Añade recetas primero.");
+            currentQuizDrink = localDB.bebidas[Math.floor(Math.random() * localDB.bebidas.length)];
+            currentQuizSize = TAMAÑOS[Math.floor(Math.random() * TAMAÑOS.length)];
+            
+            document.getElementById('quiz-drink-name').innerText = currentQuizDrink.nombre;
+            document.getElementById('quiz-drink-size').innerText = currentQuizSize;
+            document.getElementById('quiz-drink-mark').innerText = currentQuizDrink.marcaje;
+            document.getElementById('quiz-steps-list').innerHTML = '';
+            document.getElementById('quiz-feedback-results').classList.add('hidden');
+            
+            addQuizStepRow();
+            document.getElementById('quiz-setup-area').classList.add('hidden');
+            document.getElementById('quiz-game-area').classList.remove('hidden');
+        }
+
+        function addQuizStepRow() {
+            const container = document.getElementById('quiz-steps-list');
+            const div = document.createElement('div');
+            div.className = 'quiz-step-input';
+            div.innerHTML = `
+                <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+                    <strong>Paso ${container.children.length + 1}</strong>
+                    <button class="btn btn-danger btn-sm" style="margin:0;padding:2px 5px;" onclick="this.closest('.quiz-step-input').remove()">X</button>
+                </div>
+                <select class="quiz-val-act form-group">${ACCIONES_PREDEFINIDAS.map(o=>`<option>${o}</option>`).join('')}</select>
+                <div class="quiz-counters">
+                    <div class="quiz-counter-item">☕ Shots/Roast: <div class="counter-controls"><div class="btn-counter" onclick="adjC(this,-1)">-</div><div class="counter-value v-sh">0</div><div class="btn-counter" onclick="adjC(this,1)">+</div></div></div>
+                    <div class="quiz-counter-item">🧪 Pumps/Base: <div class="counter-controls"><div class="btn-counter" onclick="adjC(this,-1)">-</div><div class="counter-value v-pu">0</div><div class="btn-counter" onclick="adjC(this,1)">+</div></div></div>
+                    <div class="quiz-counter-item">➕ Extras(Scoop): <div class="counter-controls"><div class="btn-counter" onclick="adjC(this,-1)">-</div><div class="counter-value v-ex">0</div><div class="btn-counter" onclick="adjC(this,1)">+</div></div></div>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function verifyQuizAnswer() {
+            const uRows = document.querySelectorAll('#quiz-steps-list .quiz-step-input');
+            const rSteps = currentQuizDrink.pasos;
+            let errs = 0; let html = "<h3>Resultados:</h3>";
+
+            if(uRows.length !== rSteps.length) { errs++; html += `<div class="feedback-box feedback-error">⚠️ Tienes ${uRows.length} pasos, pero la receta lleva ${rSteps.length}.</div>`; }
+
+            for(let i=0; i<Math.max(uRows.length, rSteps.length); i++) {
+                if(uRows[i] && rSteps[i]) {
+                    const uAct = uRows[i].querySelector('.quiz-val-act').value;
+                    const uSh = parseInt(uRows[i].querySelector('.v-sh').innerText);
+                    const uPu = parseInt(uRows[i].querySelector('.v-pu').innerText);
+                    const uEx = parseInt(uRows[i].querySelector('.v-ex').innerText);
+                    
+                    const tSh = rSteps[i].requiere_cantidades ? rSteps[i].cantidades[currentQuizSize].shots : 0;
+                    const tPu = rSteps[i].requiere_cantidades ? rSteps[i].cantidades[currentQuizSize].pumps : 0;
+                    const tEx = rSteps[i].requiere_cantidades ? rSteps[i].cantidades[currentQuizSize].extras : 0;
+
+                    if(uAct === rSteps[i].accion && (!rSteps[i].requiere_cantidades || (uSh===tSh && uPu===tPu && uEx===tEx))) {
+                        html += `<div class="feedback-box feedback-success">✔️ Paso ${i+1} Correcto: ${rSteps[i].accion}</div>`;
+                    } else {
+                        errs++;
+                        html += `<div class="feedback-box feedback-error">❌ <strong>Paso ${i+1} Incorrecto:</strong><br>
+                        Esperado: ${rSteps[i].accion} ${rSteps[i].requiere_cantidades ? `(${tSh} sh, ${tPu} pu, ${tEx} ex)` : ''}<br>
+                        Tu ingreso: ${uAct} ${rSteps[i].requiere_cantidades ? `(${uSh} sh, ${uPu} pu, ${uEx} ex)` : ''}<br>
+                        <small>Nota oficial: ${rSteps[i].observaciones}</small></div>`;
+                    }
+                } else if(!uRows[i] && rSteps[i]) { errs++; html += `<div class="feedback-box feedback-error">❌ Te faltó el paso: ${rSteps[i].accion}</div>`; }
+            }
+
+            const box = document.getElementById('quiz-feedback-results');
+            box.innerHTML = (errs===0 ? `<h2 style="color:var(--sb-success)">¡Perfecto! 🎉</h2>` : `<h2 style="color:var(--sb-danger)">Errores: ${errs} ❌</h2>`) + html;
+            box.classList.remove('hidden');
+            box.scrollIntoView({behavior:'smooth'});
+        }
+    </script>
 </body>
 </html>
