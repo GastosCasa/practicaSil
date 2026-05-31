@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbucks en casita jjjj</title>
+    <style>
+        :root {
+            --sb-green: #006241;
+            --sb-light-green: #d4e9e2;
+            --sb-dark: #1e3932;
+            --sb-text: #212121;
+            --sb-gray: #f2f0eb;
+            --success: #2e7d32;
+            --error: #c62828;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--sb-gray);
+            color: var(--sb-text);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--sb-dark);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: var(--sb-light-green);
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--sb-light-green);
+            padding: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--sb-dark);
+        }
+
+        .ticket-container {
+            padding: 20px;
+            background: #fffbfa;
+            border-bottom: 2px dashed #ccc;
+            margin: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .ticket-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .ticket-drink {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--sb-dark);
+        }
+
+        .workspace {
+            padding: 0 15px 15px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .control-group {
+            background: var(--sb-gray);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .control-group h3 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: var(--sb-dark);
+        }
+
+        .counter-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .counter-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--sb-green);
+            background: white;
+            color: var(--sb-green);
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-circle:active {
+            background: var(--sb-light-green);
+        }
+
+        .counter-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .steps-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: white;
+            padding: 5px;
+        }
+
+        .step-item {
+            padding: 8px 10px;
+            margin: 4px 0;
+            background: #f9f9f9;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-left: 4px solid #ccc;
+            user-select: none;
+        }
+
+        .step-item.selected {
+            background: var(--sb-light-green);
+            border-left-color: var(--sb-green);
+            font-weight: 600;
+        }
+
+        .order-indicator {
+            float: right;
+            background: var(--sb-green);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background-color: var(--sb-green);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .action-btn:gradient {
+            background-color: var(--sb-dark);
+        }
+
+        /* Modal o Feedback de Resultados */
+        .feedback-view {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .feedback-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feedback-header.correct { color: var(--success); }
+        .feedback-header.incorrect { color: var(--error); }
+
+        .feedback-details {
+            text-align: left;
+            background: var(--sb-gray);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .feedback-details ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1>Starbucks en casita jjjjj</h1>
+        <p>amer si practicas eh, serio te lo digo eh</p>
+    </header>
+
+    <div class="score-board">
+        <div>Aciertos: <span id="score-correct">0</span></div>
+        <div>Fallos: <span id="score-incorrect">0</span></div>
+    </div>
+
+    <div id="game-view">
+        <div class="ticket-container">
+            <div class="ticket-header">Comanda de Bebida</div>
+            <div class="ticket-drink" id="ticket-text">Grande Caffé Latte</div>
+        </div>
+
+        <div class="workspace">
+            <div class="control-group">
+                <h3>Ingredientes / Dosis</h3>
+                
+                <div class="counter-row" id="row-espresso">
+                    <span class="counter-label">Shots de Espresso</span>
+                    <div class="counter-controls">
+                        <button class="btn-circle" onclick="decrement('espresso')">-</button>
+                        <span class="counter-value" id="val-espresso">0</span>
+                        <button class="btn-circle" onclick="increment('espresso')">+</button>
+                    </div>
+                </div>
+
+                <div class="counter-row" id="row-pumps">
+                    <span class="counter-label">Pompas de Sirope/Salsa (Pumps)</span>
+                    <div class="counter-controls">
+                        <button class="btn-circle" onclick="decrement('pumps')">-</button>
+                        <span class="counter-value" id="val-pumps">0</span>
+                        <button class="btn-circle" onclick="increment('pumps')">+</button>
+                    </div>
+                </div>
+
+                <div class="counter-row" id="row-scoops">
+                    <span class="counter-label">Cucharadas (Matcha/Fruta/Frap Roast)</span>
+                    <div class="counter-controls">
+                        <button class="btn-circle" onclick="decrement('scoops')">-</button>
+                        <span class="counter-value" id="val-scoops">0</span>
+                        <button class="btn-circle" onclick="increment('scoops')">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Método de Preparación (Ordena los pasos pulsando)</h3>
+                <div class="steps-container" id="steps-box">
+                    </div>
+            </div>
+
+            <button class="action-btn" onclick="checkAnswer()">Verificar Receta</button>
+        </div>
+    </div>
+
+    <div id="feedback-view" class="feedback-view">
+        <div id="feedback-title" class="feedback-header">¡Correcto!</div>
+        <div class="feedback-details" id="feedback-text"></div>
+        <button class="action-btn" onclick="nextDrink()">Siguiente Bebida</button>
+    </div>
+</div>
+
+<script>
+    // BASE DE DATOS ESTRUCTURADA DE RECETAS (Extraída de la documentación oficial)
+    const recipesDB = [
+        {
+            name: "Caffé Latte",
+            category: "hot_espresso",
+            sizes: {
+                "Short": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6 mm del borde", "Finalizar con Latte Art"] },
+                "Tall": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6 mm del borde", "Finalizar con Latte Art"] },
+                "Grande": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6 mm del borde", "Finalizar con Latte Art"] },
+                "Venti": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Verter leche hasta 6 mm del borde", "Finalizar con Latte Art"] }
+            }
+        },
+        {
+            name: "Latte Macchiato",
+            category: "hot_espresso",
+            sizes: {
+                "Short": { espresso: 1, pumps: 1, scoops: 0, steps: ["Vaporizar leche", "Añadir sirope de vainilla", "Verter leche vaporizada hasta 12 mm del borde", "Verter espresso a través de la crema", "Finalizar con salsa de caramelo (diseño en cruz 7-7-2 y doble círculo)"] },
+                "Tall": { espresso: 1, pumps: 2, scoops: 0, steps: ["Vaporizar leche", "Añadir sirope de vainilla", "Verter leche vaporizada hasta 12 mm del borde", "Verter espresso a través de la crema", "Finalizar con salsa de caramelo (diseño en cruz 7-7-2 y doble círculo)"] },
+                "Grande": { espresso: 2, pumps: 3, scoops: 0, steps: ["Vaporizar leche", "Añadir sirope de vainilla", "Verter leche vaporizada hasta 12 mm del borde", "Verter espresso a través de la crema", "Finalizar con salsa de caramelo (diseño en cruz 7-7-2 y doble círculo)"] },
+                "Venti": { espresso: 2, pumps: 4, scoops: 0, steps: ["Vaporizar leche", "Añadir sirope de vainilla", "Verter leche vaporizada hasta 12 mm del borde", "Verter espresso a través de la crema", "Finalizar con salsa de caramelo (diseño en cruz 7-7-2 y doble círculo)"] }
+            }
+        },
+        {
+            name: "Caffé Americano",
+            category: "hot_espresso",
+            sizes: {
+                "Short": { espresso: 1, pumps: 0, scoops: 0, steps: ["Llenar la taza con agua caliente", "Verter los shots directamente en la taza"] },
+                "Tall": { espresso: 2, pumps: 0, scoops: 0, steps: ["Llenar la taza con agua caliente", "Verter los shots directamente en la taza"] },
+                "Grande": { espresso: 3, pumps: 0, scoops: 0, steps: ["Llenar la taza con agua caliente", "Verter los shots directamente en la taza"] },
+                "Venti": { espresso: 4, pumps: 0, scoops: 0, steps: ["Llenar la taza con agua caliente", "Verter los shots directamente en la taza"] }
+            }
+        },
+        {
+            name: "Cappuccino",
+            category: "hot_espresso",
+            sizes: {
+                "Short": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche (aeración libre de espuma: de 6 a 8 segundos)", "Shots en taza", "Verter libremente la leche espumada (50% leche y 50% crema)"] },
+                "Tall": { espresso: 1, pumps: 0, scoops: 0, steps: ["Vaporizar leche (aeración libre de espuma: de 6 a 8 segundos)", "Shots en taza", "Verter libremente la leche espumada (50% leche y 50% crema)"] },
+                "Grande": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche (aeración libre de espuma: de 6 a 8 segundos)", "Shots en taza", "Verter libremente la leche espumada (50% leche y 50% crema)"] },
+                "Venti": { espresso: 2, pumps: 0, scoops: 0, steps: ["Vaporizar leche (aeración libre de espuma: de 6 a 8 segundos)", "Shots en taza", "Verter libremente la leche espumada (50% leche y 50% crema)"] }
+            }
+        },
+        {
+            name: "Mocha / Mocha Blanco",
+            category: "hot_espresso",
+            sizes: {
+                "Short": { espresso: 1, pumps: 2, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir pompas de salsa", "Remover espresso y salsa juntos", "Llenar con leche vaporizada hasta 12 mm del borde", "Cubrir con nata montada (1.5 vueltas) y espirales de mocha si aplica"] },
+                "Tall": { espresso: 1, pumps: 3, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir pompas de salsa", "Remover espresso y salsa juntos", "Llenar con leche vaporizada hasta 12 mm del borde", "Cubrir con nata montada (1.5 vueltas) y espirales de mocha si aplica"] },
+                "Grande": { espresso: 2, pumps: 4, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir pompas de salsa", "Remover espresso y salsa juntos", "Llenar con leche vaporizada hasta 12 mm del borde", "Cubrir con nata montada (1.5 vueltas) y espirales de mocha si aplica"] },
+                "Venti": { espresso: 2, pumps: 5, scoops: 0, steps: ["Vaporizar leche", "Shots en taza", "Añadir pompas de salsa", "Remover espresso y salsa juntos", "Llenar con leche vaporizada hasta 12 mm del borde", "Cubrir con nata montada (1.5 vueltas) y espirales de mocha si aplica"] }
+            }
+        },
+        {
+            name: "Matcha Tea Latte",
+            category: "hot_tea_chocolate",
+            sizes: {
+                "Short": { espresso: 0, pumps: 0, scoops: 1, steps: ["Añadir las cucharadas de Matcha directamente a la jarra con la leche", "Vaporizar juntos durante 2 segundos", "Verter en la taza"] },
+                "Tall": { espresso: 0, pumps: 0, scoops: 2, steps: ["Añadir las cucharadas de Matcha directamente a la jarra con la leche", "Vaporizar juntos durante 2 segundos", "Verter en la taza"] },
+                "Grande": { espresso: 0, pumps: 0, scoops: 3, steps: ["Añadir las cucharadas de Matcha directamente a la jarra con la leche", "Vaporizar juntos durante 2 segundos", "Verter en la taza"] },
+                "Venti": { espresso: 0, pumps: 0, scoops: 4, steps: ["Añadir las cucharadas de Matcha directamente a la jarra con la leche", "Vaporizar juntos durante 2 segundos", "Verter en la taza"] }
+            }
+        },
+        {
+            name: "Iced Caramel Macchiato",
+            category: "iced_coffee",
+            sizes: {
+                "Tall": { espresso: 1, pumps: 2, scoops: 0, steps: ["Añadir sirope de vainilla abajo", "Leche fría hasta la línea superior", "Añadir hielo", "Verter los shots de espresso arriba (a través del hielo)", "Cubrir con líneas de salsa de caramelo (diseño 7-7-2)"] },
+                "Grande": { espresso: 2, pumps: 3, scoops: 0, steps: ["Añadir sirope de vainilla abajo", "Leche fría hasta la línea superior", "Añadir hielo", "Verter los shots de espresso arriba (a través del hielo)", "Cubrir con líneas de salsa de caramelo (diseño 7-7-2)"] },
+                "Venti": { espresso: 3, pumps: 5, scoops: 0, steps: ["Añadir sirope de vainilla abajo", "Leche fría hasta la línea superior", "Añadir hielo", "Verter los shots de espresso arriba (a través del hielo)", "Cubrir con líneas de salsa de caramelo (diseño 7-7-2)"] }
+            }
+        },
+        {
+            name: "Iced Brown Sugar Oat Shaken Espresso",
+            category: "iced_coffee",
+            sizes: {
+                "Tall": { espresso: 2, pumps: 3, scoops: 0, steps: ["Verter los shots Blonde", "Añadir las pompas de Brown Sugar y canela en la coctelera", "Añadir hielo hasta el nombre del tamaño en el lado naranja", "Tapar y agitar 10 veces de arriba a abajo", "Verter todo en el vaso", "Terminar con bebida de avena (Oatmilk) hasta 6 mm del borde"] },
+                "Grande": { espresso: 3, pumps: 4, scoops: 0, steps: ["Verter los shots Blonde", "Añadir las pompas de Brown Sugar y canela en la coctelera", "Añadir hielo hasta el nombre del tamaño en el lado naranja", "Tapar y agitar 10 veces de arriba a abajo", "Verter todo en el vaso", "Terminar con bebida de avena (Oatmilk) hasta 6 mm del borde"] },
+                "Venti": { espresso: 4, pumps: 6, scoops: 0, steps: ["Verter los shots Blonde", "Añadir las pompas de Brown Sugar y canela en la coctelera", "Añadir hielo hasta el nombre del tamaño en el lado naranja", "Tapar y agitar 10 veces de arriba a abajo", "Verter todo en el vaso", "Terminar con bebida de avena (Oatmilk) hasta 6 mm del borde"] }
+            }
+        },
+        {
+            name: "Starbucks Refresha (Strawberry / Mango)",
+            category: "iced_tea_refreshers",
+            sizes: {
+                "Tall": { espresso: 0, pumps: 0, scoops: 1, steps: ["Añadir base de Refresher hasta la 1ª línea", "Añadir Agua o Bebida de Coco hasta la 2ª línea", "Añadir Fruta deshidratada (1 cucharada)", "Añadir hielo hasta la línea de hielo", "Agitar vigorosamente 5 veces", "Verter en vaso frío hasta 6 mm del borde"] },
+                "Grande": { espresso: 0, pumps: 0, scoops: 1, steps: ["Añadir base de Refresher hasta la 1ª línea", "Añadir Agua o Bebida de Coco hasta la 2ª línea", "Añadir Fruta deshidratada (1 cucharada colmada)", "Añadir hielo hasta la línea de hielo", "Agitar vigorosamente 5 veces", "Verter en vaso frío hasta 6 mm del borde"] },
+                "Venti": { espresso: 0, pumps: 0, scoops: 2, steps: ["Añadir base de Refresher hasta la 1ª línea", "Añadir Agua o Bebida de Coco hasta la 2ª línea", "Añadir Fruta deshidratada (2 cucharadas)", "Añadir hielo hasta la línea de hielo", "Agitar vigorosamente 5 veces", "Verter en vaso frío hasta 6 mm del borde"] }
+            }
+        },
+        {
+            name: "Frappuccino de Caramelo",
+            category: "frappuccinos",
+            sizes: {
+                "Tall": { espresso: 0, pumps: 2, scoops: 2, steps: ["Pompas de Frap Roast o Leche Entera hasta la 1ª línea del vaso", "Verter contenido del vaso en la jarra de la batidora", "Añadir sabores/siropes/salsas en la jarra (Caramelo)", "Añadir hielo con el cazo correspondiente", "Añadir pompas de Base (Café o Crema)", "Batir pulsando el Botón #1", "Decorar con espirales de Caramel Drizzle, nata y servir con pajita"] },
+                "Grande": { espresso: 0, pumps: 3, scoops: 3, steps: ["Pompas de Frap Roast o Leche Entera hasta la 1ª línea del vaso", "Verter contenido del vaso en la jarra de la batidora", "Añadir sabores/siropes/salsas en la jarra (Caramelo)", "Añadir hielo con el cazo correspondiente", "Añadir pompas de Base (Café o Crema)", "Batir pulsando el Botón #1", "Decorar con espirales de Caramel Drizzle, nata y servir con pajita"] },
+                "Venti": { espresso: 0, pumps: 4, scoops: 4, steps: ["Pompas de Frap Roast o Leche Entera hasta la 1ª línea del vaso", "Verter contenido del vaso en la jarra de la batidora", "Añadir sabores/siropes/salsas en la jarra (Caramelo)", "Añadir hielo con el cazo correspondiente", "Añadir pompas de Base (Café o Crema)", "Batir pulsando el Botón #1", "Decorar con espirales de Caramel Drizzle, nata y servir con pajita"] }
+            }
+        }
+    ];
+
+    // Variables de Estado
+    let currentDrink = {};
+    let currentSize = "";
+    let userSelections = { espresso: 0, pumps: 0, scoops: 0, steps: [] };
+    let globalCorrect = 0;
+    let globalIncorrect = 0;
+
+    // Inicializar app
+    function initGame() {
+        nextDrink();
+    }
+
+    function increment(type) {
+        userSelections[type]++;
+        document.getElementById(`val-${type}`).innerText = userSelections[type];
+    }
+
+    document.addEventListener("DOMContentLoaded", initGame);
+
+    function decrement(type) {
+        if(userSelections[type] > 0) {
+            userSelections[type]--;
+            document.getElementById(`val-${type}`).innerText = userSelections[type];
+        }
+    }
+
+    function nextDrink() {
+        // Reset inputs de usuario
+        userSelections = { espresso: 0, pumps: 0, scoops: 0, steps: [] };
+        ['espresso', 'pumps', 'scoops'].forEach(t => document.getElementById(`val-${t}`).innerText = 0);
+        
+        // Seleccionar bebida y tamaño aleatorio
+        const randomRecipe = recipesDB[Math.floor(Math.random() * recipesDB.length)];
+        const sizesAvailable = Object.keys(randomRecipe.sizes);
+        const randomSize = sizesAvailable[Math.floor(Math.random() * sizesAvailable.length)];
+        
+        currentDrink = randomRecipe;
+        currentSize = randomSize;
+
+        // Renderizar comanda en pantalla
+        document.getElementById("ticket-text").innerText = `${currentSize} ${currentDrink.name}`;
+
+        // Renderizar Pasos desordenados
+        const stepsBox = document.getElementById("steps-box");
+        stepsBox.innerHTML = "";
+        
+        const originalSteps = currentDrink.sizes[currentSize].steps;
+        // Mezclar pasos de forma aleatoria
+        const shuffledSteps = [...originalSteps].sort(() => Math.random() - 0.5);
+
+        shuffledSteps.forEach((stepText) => {
+            const div = document.createElement("div");
+            div.className = "step-item";
+            div.innerText = stepText;
+            div.onclick = () => toggleStepSelection(div, stepText);
+            stepsBox.appendChild(div);
+        });
+
+        // Alternar vistas
+        document.getElementById("game-view").style.display = "block";
+        document.getElementById("feedback-view").style.display = "none";
+    }
+
+    function toggleStepSelection(element, text) {
+        const index = userSelections.steps.indexOf(text);
+        if (index > -1) {
+            // Quitar de la selección
+            userSelections.steps.splice(index, 1);
+            element.classList.remove("selected");
+            const badg = element.querySelector('.order-indicator');
+            if(badg) badg.remove();
+            
+            // Re-renderizar números de secuencia restantes
+            rebuildStepBadges();
+        } else {
+            // Añadir a la selección
+            userSelections.steps.push(text);
+            element.classList.add("selected");
+            const badge = document.createElement("span");
+            badge.className = "order-indicator";
+            badge.innerText = userSelections.steps.length;
+            element.appendChild(badge);
+        }
+    }
+
+    function rebuildStepBadges() {
+        const items = document.querySelectorAll('.step-item');
+        items.forEach(el => {
+            const text = el.childNodes[0].textContent;
+            const idx = userSelections.steps.indexOf(text);
+            const badg = el.querySelector('.order-indicator');
+            if(badg) badg.remove();
+            if(idx > -1) {
+                const badge = document.createElement("span");
+                badge.className = "order-indicator";
+                badge.innerText = idx + 1;
+                el.appendChild(badge);
+            }
+        });
+    }
+
+    function checkAnswer() {
+        const target = currentDrink.sizes[currentSize];
+        
+        // Validaciones estrictas
+        const espressoOk = userSelections.espresso === target.espresso;
+        const pumpsOk = userSelections.pumps === target.pumps;
+        const scoopsOk = userSelections.scoops === target.scoops;
+        
+        // Validación del orden secuencial de los arrays de pasos
+        let stepsOk = userSelections.steps.length === target.steps.length;
+        if(stepsOk) {
+            for(let i=0; i<target.steps.length; i++) {
+                if(userSelections.steps[i] !== target.steps[i]) {
+                    stepsOk = false;
+                    break;
+                }
+            }
+        }
+
+        const isCorrect = espressoOk && pumpsOk && scoopsOk && stepsOk;
+        
+        const titleEl = document.getElementById("feedback-title");
+        const textEl = document.getElementById("feedback-text");
+
+        if (isCorrect) {
+            globalCorrect++;
+            document.getElementById("score-correct").innerText = globalCorrect;
+            titleEl.innerText = "¡Perfecto, Barista! 🎉";
+            titleEl.className = "feedback-header correct";
+            textEl.innerHTML = `Has preparado un <strong>${currentSize} ${currentDrink.name}</strong> siguiendo todos los estándares de la guía de forma estricta.`;
+        } else {
+            globalIncorrect++;
+            document.getElementById("score-incorrect").innerText = globalIncorrect;
+            titleEl.innerText = "Receta Incorrecta ❌";
+            titleEl.className = "feedback-header incorrect";
+            
+            // Explicar el error con precisión pedagógica
+            textEl.innerHTML = `
+                <p><strong>Estándar oficial para el ${currentSize} ${currentDrink.name}:</strong></p>
+                <ul>
+                    <li>Shots de espresso requeridos: ${target.espresso} (Tú pusiste: ${userSelections.espresso})</li>
+                    <li>Pumps de sirope/salsa: ${target.pumps} (Tú pusiste: ${userSelections.pumps})</li>
+                    <li>Cucharadas requeridas: ${target.scoops} (Tú pusiste: ${userSelections.scoops})</li>
+                </ul>
+                <p style="margin-top:10px;"><strong>Orden secuencial correcto:</strong></p>
+                <ol style="margin-left:20px; font-size:0.85rem;">
+                    ${target.steps.map(step => `<li>${step}</li>`).join('')}
+                </ol>
+            `;
+        }
+
+        document.getElementById("game-view").style.display = "none";
+        document.getElementById("feedback-view").style.display = "block";
+    }
+</script>
+</body>
+</html>
